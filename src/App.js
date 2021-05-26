@@ -1,6 +1,7 @@
 import "./styles.css";
 import { useEffect } from "react";
 import { useIntervalSearch } from "./hooks/searchHook";
+import { useNotification } from "./hooks/notificationHook";
 
 export default function App() {
   const {
@@ -10,6 +11,8 @@ export default function App() {
     stopSearch
   } = useIntervalSearch();
 
+  const { notificationPermisssion, showNotification } = useNotification();
+
   const vaccineCount = (sessions) =>
     sessions.reduce(
       (total, current) => total + current.available_capacity_dose1,
@@ -17,14 +20,16 @@ export default function App() {
     );
 
   useEffect(() => {
-    if (nearbyCenters.length) alert("Vaccines Available");
-  }, [nearbyCenters]);
+    if (nearbyCenters.length && notificationPermisssion)
+      showNotification("Vaccines Available");
+  }, [nearbyCenters]); // eslint-disable-line
 
   return (
     <div className="App">
       <button onClick={startSearch}>Start Looking for Centers</button>
       <button onClick={stopSearch}>Stop Looking for centers</button>
-
+      <br />
+      <br />
       {nearbyCenters.length ? (
         <ol>
           {nearbyCenters.map((center) => (
