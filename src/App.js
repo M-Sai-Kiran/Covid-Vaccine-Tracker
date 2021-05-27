@@ -1,4 +1,4 @@
-import "./styles.css";
+import "./styles.scss";
 import { useEffect } from "react";
 import { useIntervalSearch } from "./hooks/searchHook";
 import { useNotification } from "./hooks/notificationHook";
@@ -19,6 +19,9 @@ export default function App() {
       0
     );
 
+  const joinedVaccineNames = (sessions) =>
+    sessions.map((session) => session.vaccine).join(",");
+
   useEffect(() => {
     if (nearbyCenters.length && notificationPermisssion)
       showNotification("Vaccines Available");
@@ -26,18 +29,25 @@ export default function App() {
 
   return (
     <div className="App">
-      <button onClick={startSearch}>Start Looking for Centers</button>
+      <button className="mg-r-sm" onClick={startSearch}>
+        Start Looking for Centers
+      </button>
       <button onClick={stopSearch}>Stop Looking for centers</button>
       <br />
       <br />
       {nearbyCenters.length ? (
-        <ol>
-          {nearbyCenters.map((center) => (
-            <li key={center.center_id}>{`${
-              center.name
-            } - Vaccine Count : ${vaccineCount(center.sessions)}`}</li>
-          ))}
-        </ol>
+        <>
+          <h2>Vaccines Dose 1</h2>
+          <ol>
+            {nearbyCenters.map((center) => (
+              <li key={center.center_id}>{`${
+                center.name
+              } - Vaccine : ${joinedVaccineNames(
+                center.sessions
+              )} - Count : ${vaccineCount(center.sessions)}`}</li>
+            ))}
+          </ol>
+        </>
       ) : looking ? (
         <span>Looking ....</span>
       ) : (

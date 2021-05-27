@@ -4,9 +4,8 @@ export const centerValidation = (center) => {
   if (
     center.sessions.some(
       (session) =>
-        session.min_age_limit > 17 &&
-        session.vaccine === "COVAXIN" &&
-        session.available_capacity_dose1 > 0
+        session.min_age_limit > 17 && session.available_capacity_dose1 > 0
+      // && session.vaccine === "COVAXIN"
     )
   )
     return true;
